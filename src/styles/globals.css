@@ -11,9 +11,11 @@
   --white: #FFFFFF;
 }
 
-html, body, #root {
-  height: 100%;
-    --header-h: 80px; 
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  --header-h: 80px;
 }
 
 body {

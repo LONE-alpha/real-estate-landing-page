@@ -115,7 +115,7 @@ const Footer = () => {
             <motion.a
               href="https://igbins-portfolio.vercel.app/"
               className="text-blue-400 hover:text-blue-300"
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05 }} target='blank'
             >
               IGBINS MODEL
             </motion.a>
