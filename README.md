@@ -43,7 +43,6 @@ real-estate-landing/
 │   │   ├── Preloader.jsx
 │   │   ├── PropertyCard.jsx
 │   │   ├── PropertyMap.jsx
-│   │   ├── PropertyModal.jsx
 │   │   ├── PropertySection.jsx
 │   │   ├── PropertySlider.jsx
 │   │   ├── SearchBar.jsx
@@ -52,8 +51,8 @@ real-estate-landing/
 │   │   └── Testimonials.jsx
 │   │
 │   ├── data/
-│   │   ├── properties.json
-│   │   └── testimonials.json
+│   │   ├── properties.js
+│   │   └── testimonials.js
 │   │
 │   ├── pages/
 │   │   ├── Home.jsx
