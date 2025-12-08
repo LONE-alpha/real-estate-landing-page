@@ -1,102 +1,96 @@
-// src/components/Testimonials.jsx
 import { motion } from 'framer-motion';
-import { FaStar, FaQuoteLeft } from 'react-icons/fa';
-
-const testimonials = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    role: "Home Buyer",
-    avatar: "img/testimonials/team2.png",
-    review: "Found my dream home in just 2 weeks! The team was incredibly professional.",
-    rating: 5
-  },
-  {
-    id: 2,
-    name: "Michael Chen",
-    role: "Property Investor", 
-    avatar: "img/testimonials/team2.png",
-    review: "Great ROI on my last purchase! Excellent market insights.",
-    rating: 5
-  },
-  {
-    id: 3,
-    name: "Emily Rodriguez",
-    role: "First-time Buyer",
-    avatar: "img/testimonials/team2.png",
-    review: "They guided me through every step as a first-time buyer. Amazing experience!",
-    rating: 5
-  },
-  {
-    id: 4,
-    name: "David Thompson",
-    role: "Commercial Client",
-    avatar: "img/testimonials/team2.png",
-    review: "Professional service from start to finish. Highly recommended!",
-    rating: 5
-  }
-];
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules';
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import TestimonialCard from './TestimonialCard';
+import { testimonials } from '../data/testimonials.js';
 
 const Testimonials = () => {
-  const renderStars = (rating) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <FaStar
-        key={i}
-        className={`w-5 h-5 ${i < rating ? 'text-yellow-400' : 'text-gray-300'}`}
-      />
-    ));
-  };
-
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
+    <section className="bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16 lg:py-24">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Header */}
         <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
+          className="mb-12 text-center"
         >
-          <h2 className="section-title text-center">
-            Happy Clients
+          <h2 className="mb-4 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-4xl">
+            What Our Clients Say
           </h2>
-          <p className="text-x text-gray-600 max-w-2xl mx-auto">
-            Don't just take our word for it
+          <p className="mx-auto max-w-2xl text-lg text-gray-600">
+            Trusted by thousands of homeowners and investors
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={testimonial.id}
-              className="bg-white rounded-2xl shadow-soft p-6 h-full"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.05 }}
-            >
-              <FaQuoteLeft className="w-8 h-8 text-primary/20 mb-4" />
-              <div className="flex mb-4">
-                {renderStars(testimonial.rating)}
-              </div>
-              <p className="text-gray-700 mb-6 italic">
-                "{testimonial.review}"
-              </p>
-              <div className="flex items-center">
-                <img
-                  src={testimonial.avatar}
-                  alt={testimonial.name}
-                  className="w-12 h-12 rounded-full mr-4 object-cover"
-                />
-                <div>
-                  <h4 className="font-semibold text-neutral-dark">{testimonial.name}</h4>
-                  <p className="text-gray-600 text-sm">{testimonial.role}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+        {/* Swiper Slider */}
+        <div className="relative">
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay, EffectCoverflow]}
+            spaceBetween={70}
+            slidesPerView={1}
+            breakpoints={{
+              640: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            pagination={{ clickable: true, dynamicBullets: true }}
+            navigation={{
+              nextEl: '.testimonial-next',
+              prevEl: '.testimonial-prev',
+            }}
+            effect="coverflow"
+            coverflowEffect={{
+              rotate: 0,
+              stretch: 0,
+              depth: 100,
+              modifier: 2.5,
+              slideShadows: false,
+            }}
+            className="!pb-12"
+          >
+            {testimonials.map((testimonial, index) => (
+              <SwiperSlide key={testimonial.id}>
+                <TestimonialCard testimonial={testimonial} index={index} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          {/* Custom Navigation Buttons */}
+          <button className="testimonial-prev absolute left-0 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white p-3 shadow-lg transition-all hover:bg-gray-50 md:left-4 lg:flex">
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+          <button className="testimonial-next absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white p-3 shadow-lg transition-all hover:bg-gray-50 md:right-4 lg:flex">
+            <ChevronRight className="h-6 w-6" />
+          </button>
         </div>
+
+        {/* Stats */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="mt-16 grid grid-cols-2 gap-6 md:grid-cols-4"
+        >
+          {[
+            { value: '10K+', label: 'Properties Sold' },
+            { value: '4.9', label: 'Average Rating' },
+            { value: '98%', label: 'Client Satisfaction' },
+            { value: '24/7', label: 'Support Available' },
+          ].map((stat, index) => (
+            <div
+              key={index}
+              className="rounded-xl bg-white p-6 text-center shadow-lg"
+            >
+              <div className="text-3xl font-bold text-orange-500 md:text-4xl">
+                {stat.value}
+              </div>
+              <div className="mt-2 text-sm text-gray-600">{stat.label}</div>
+            </div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

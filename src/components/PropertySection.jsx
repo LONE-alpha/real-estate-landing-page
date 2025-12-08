@@ -1,126 +1,160 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Filter, Grid, List } from 'lucide-react';
 import PropertyCard from './PropertyCard';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
+import SidebarFilter from './SidebarFilter';
+import { properties } from '../data/properties.js';
 
-const SectionBlock = ({ title, items, id }) => {
-  const displayItems = items.slice(0, 6);
-
-  const [swiper, setSwiper] = useState(null);
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(displayItems.length > 1);
-
-  const titleVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (i) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: i * 0.1, duration: 0.4 }
-    })
-  };
+const PropertySection = () => {
+  const [viewMode, setViewMode] = useState('grid');
+  const [showFilters, setShowFilters] = useState(false);
+  const [filteredProperties, setFilteredProperties] = useState(properties);
 
   return (
-    <motion.section
-      className="mt-10"
-      aria-labelledby={`${id}-heading`}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
-    >
-      <motion.div className="flex items-end justify-between" variants={titleVariants}>
-        <h2 id={`${id}-heading`} className="section-title">{title}</h2>
-        <motion.a
-          href="#"
-          className="text-sm font-semibold text-blue-800 hover:underline"
-          whileHover={{ x: 5 }}
+    <section className="py-12 sm:py-16 lg:py-24">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-8"
         >
-          View all
-        </motion.a>
-      </motion.div>
+          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+            <div>
+              <h2 className="mb-2 text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
+                Featured Properties
+              </h2>
+              <p className="text-gray-600">
+                Discover your perfect home from our curated collection
+              </p>
+            </div>
+            
+            {/* Controls */}
+            <div className="flex items-center space-x-4">
+              {/* View Toggle */}
+              <div className="hidden rounded-lg border border-gray-300 p-1 md:flex">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`rounded-md p-2 ${viewMode === 'grid' ? 'bg-gray-100' : ''}`}
+                >
+                  <Grid className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`rounded-md p-2 ${viewMode === 'list' ? 'bg-gray-100' : ''}`}
+                >
+                  <List className="h-5 w-5" />
+                </button>
+              </div>
+              
+              {/* Filter Button */}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex items-center justify-center rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition-all duration-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 md:hidden"
+              >
+                <Filter className="mr-2 h-4 w-4" />
+                Filters
+              </motion.button>
+            </div>
+          </div>
+        </motion.div>
 
-      {/* Mobile: Swiper Carousel with controls */}
-      <div className="md:hidden mt-4">
-        <Swiper
-          modules={[Pagination]}
-          pagination={{ clickable: true }}
-          spaceBetween={16}
-          slidesPerView={1}
-          className="pb-4"
-          onSwiper={(s) => {
-            setSwiper(s);
-            setCanPrev(!s.isBeginning);
-            setCanNext(!s.isEnd);
-          }}
-          onSlideChange={(s) => {
-            setCanPrev(!s.isBeginning);
-            setCanNext(!s.isEnd);
-          }}
-        >
-          {displayItems.map((p) => (
-            <SwiperSlide key={p.id}>
-              <PropertyCard property={p} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <div className="flex gap-8">
+          {/* Sidebar Filter - Desktop */}
+          <motion.aside
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="hidden w-64 flex-shrink-0 lg:block"
+          >
+            <SidebarFilter onFilterChange={setFilteredProperties} />
+          </motion.aside>
 
-        <div className="flex items-center justify-between mt-2">
-          <motion.button
-            type="button"
-            aria-label="Previous"
-            onClick={() => swiper?.slidePrev()}
-            disabled={!canPrev}
-            className={`rounded-md border px-4 py-2 font-semibold transition ${
-              canPrev ? 'bg-white hover:bg-gray-50' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-            }`}
-            whileHover={canPrev ? { scale: 1.05 } : {}}
-            whileTap={canPrev ? { scale: 0.95 } : {}}
+          {/* Mobile Filter Modal */}
+          <AnimatePresence>
+            {showFilters && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 bg-black/50 lg:hidden"
+                onClick={() => setShowFilters(false)}
+              >
+                <motion.div
+                  initial={{ x: '-100%' }}
+                  animate={{ x: 0 }}
+                  exit={{ x: '-100%' }}
+                  transition={{ type: 'spring', damping: 30 }}
+                  className="h-full w-80 max-w-full bg-white p-6"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <SidebarFilter onFilterChange={setFilteredProperties} />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Property Grid */}
+          <motion.div
+            layout
+            className="flex-1"
           >
-            Prev
-          </motion.button>
-          <motion.button
-            type="button"
-            aria-label="Next"
-            onClick={() => swiper?.slideNext()}
-            disabled={!canNext}
-            className={`rounded-md border px-4 py-2 font-semibold transition ${
-              canNext ? 'bg-white hover:bg-gray-50' : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-            }`}
-            whileHover={canNext ? { scale: 1.05 } : {}}
-            whileTap={canNext ? { scale: 0.95 } : {}}
-          >
-            Next
-          </motion.button>
+            <div className={`
+              ${viewMode === 'grid' 
+                ? 'grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3' 
+                : 'space-y-6'
+              }
+            `}>
+              {filteredProperties.map((property) => (
+                <motion.div
+                  key={property.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <PropertyCard property={property} />
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Empty State */}
+            {filteredProperties.length === 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="py-20 text-center"
+              >
+                <div className="mb-4 text-6xl">🏡</div>
+                <h3 className="mb-2 text-xl font-semibold text-gray-900 sm:text-2xl">No properties found</h3>
+                <p className="text-gray-600">Try adjusting your filters</p>
+              </motion.div>
+            )}
+
+            {/* Load More */}
+            {filteredProperties.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                className="mt-12 text-center"
+              >
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="rounded-lg border-2 border-orange-500 px-8 py-4 text-base font-semibold text-orange-500 transition-all duration-300 hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                >
+                  Load More Properties
+                </motion.button>
+              </motion.div>
+            )}
+          </motion.div>
         </div>
       </div>
-
-      {/* Desktop/Tablet: Grid 3x2 */}
-      <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-        {displayItems.map((p, i) => (
-          <motion.div key={p.id} custom={i} variants={cardVariants}>
-            <PropertyCard property={p} />
-          </motion.div>
-        ))}
-      </div>
-    </motion.section>
+    </section>
   );
 };
 
-const PropertySections = ({ hot = [], newest = [], sold = [] }) => {
-  return (
-    <div>
-      <SectionBlock title="Hot Properties" items={hot} id="hot-section" />
-      <SectionBlock title="New Listings" items={newest} id="new-section" />
-      <SectionBlock title="Recently Sold" items={sold} id="sold-section" />
-    </div>
-  );
-};
-
-export default PropertySections;
+export default PropertySection;

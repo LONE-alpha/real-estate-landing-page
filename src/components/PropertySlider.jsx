@@ -1,33 +1,30 @@
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
+import PropertyCard from './PropertyCard';
 
-const PropertySlider = ({ images = [], altBase = 'Property image' }) => {
+const PropertySlider = ({ properties }) => {
   return (
-    <Swiper
-      modules={[Navigation, Pagination]}
-      navigation
-      pagination={{ clickable: true }}
-      spaceBetween={8}
-      slidesPerView={1}
-      nested={true}
-      grabCursor={true}
-      className="rounded-lg overflow-hidden"
-      style={{ '--swiper-navigation-color': '#fff' }}
-    >
-      {images.map((img, idx) => (
-        <SwiperSlide key={idx}>
-          <img
-            src={`/${img}`} // <-- public folder path
-            alt={`${altBase} ${idx + 1}`}
-            className="h-x w-full object-cover"
-            loading="lazy"
-          />
-        </SwiperSlide>
-      ))}
-    </Swiper>
+    <div className="relative">
+      <Swiper
+        modules={[Navigation]}
+        spaceBetween={24}
+        slidesPerView={1}
+        breakpoints={{
+          640: { slidesPerView: 1 },
+          768: { slidesPerView: 2 },
+          1024: { slidesPerView: 3 },
+          1280: { slidesPerView: 4 },
+        }}
+        navigation
+        className="!pb-12"
+      >
+        {properties.map((property) => (
+          <SwiperSlide key={property.id}>
+            <PropertyCard property={property} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
   );
 };
 

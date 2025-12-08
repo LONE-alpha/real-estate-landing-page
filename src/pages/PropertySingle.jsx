@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import propertiesData from '../data/properties.json';
+import propertiesData from '../data/properties.js';
 import PropertySlider from '../components/PropertySlider';
 import PropertyMap from '../components/PropertyMap';
 

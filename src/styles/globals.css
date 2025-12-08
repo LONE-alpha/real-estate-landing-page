@@ -1,66 +1,90 @@
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import "swiper/css/effect-coverflow";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Global theme tweaks */
-:root {
-  --primary: #1E3A8A; /* Rich Blue */
-  --accent: #FBBF24;  /* Golden Yellow */
-  --neutral-light: #F3F4F6;
-  --neutral-dark: #111827;
-  --white: #FFFFFF;
+@layer base {
+  :root {
+    --primary: 14 95% 57%;
+    --primary-dark: 14 95% 47%;
+    --secondary: 210 100% 50%;
+    --accent: 160 84% 39%;
+    --background: 0 0% 98%;
+    --foreground: 222 47% 11%;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
 }
 
-#root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  --header-h: 80px;
-}
+@layer components {
+  .container-custom {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
 
-body {
-  @apply bg-gray-50 text-gray-800 antialiased;
-}
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50;
+  }
 
-/* Smooth focus ring */
-:focus-visible {
-  outline: 2px dashed var(--accent);
-  outline-offset: 3px;
-}
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition-all duration-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+  }
 
-/* Custom scrollbar */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
-}
+  .card-hover {
+    @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-xl;
+  }
 
-*::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
+  .section-padding {
+    @apply py-12 sm:py-16 lg:py-24;
+  }
 
-*::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
-  border-radius: 8px;
-}
+  .heading-1 {
+    @apply text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl;
+  }
 
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
+  .heading-2 {
+    @apply text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl;
+  }
 
-/* Utility classes */
-.section-title {
-  @apply text-2xl md:text-3xl font-bold text-gray-900;
-}
-
-.btn-primary {
-  @apply inline-flex items-center justify-center rounded-md bg-blue-800 text-white px-4 py-2 font-semibold shadow hover:bg-blue-900 transition-colors;
-}
-
-.badge {
-  @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold;
-}
-/* Prevent accidental horizontal scroll from sliders/full-bleed sections */
-html, body {
-  overflow-x: hidden;
+  .heading-3 {
+    @apply text-xl font-semibold sm:text-2xl;
+  }
+  
+  /* Line clamp utilities (built into Tailwind v3.3+) */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+  
+  .line-clamp-4 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
 }

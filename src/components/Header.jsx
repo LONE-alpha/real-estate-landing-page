@@ -1,86 +1,115 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, Phone, User } from 'lucide-react';
 
 const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Properties', href: '#' },
-    { label: 'Contact', href: '#' }
+    { label: 'Buy', href: '#buy' },
+    { label: 'Rent', href: '#rent' },
+    { label: 'Sell', href: '#sell' },
+    { label: 'About', href: '#about' },
+    { label: 'Contact', href: '#contact' },
   ];
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/95 backdrop-blur shadow-md'
-          : 'bg-white/90 backdrop-blur border-b border-gray-200'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-        <motion.a
-          href="/"
-          className="flex items-center gap-2"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <motion.span
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-blue-800 text-white font-bold"
-            whileHover={{ rotate: 12 }}
-            transition={{ type: 'spring', stiffness: 400 }}
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <nav className="flex h-16 items-center justify-between lg:h-20">
+          {/* Logo */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center"
           >
-            BE
-          </motion.span>
-          <span className="text-xl font-extrabold text-gray-900">BlueEstate</span>
-        </motion.a>
+            <div className="text-2xl font-bold text-gray-900">
+              <span className="text-orange-500">Estate</span>Pro
+            </div>
+          </motion.div>
 
-        <nav className="hidden md:flex items-center gap-8 text-sm text-gray-700">
-          {navItems.map((item, idx) => (
-            <motion.a
-              key={idx}
-              href={item.href}
-              className="relative hover:text-blue-800 transition-colors"
-              whileHover="hover"
-              initial="initial"
+          {/* Desktop Navigation */}
+          <div className="hidden items-center space-x-8 lg:flex">
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="text-sm font-medium text-gray-700 transition-colors hover:text-orange-500"
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="hidden items-center space-x-4 lg:flex">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="rounded-lg border-2 border-orange-500 px-6 py-3 text-sm font-semibold text-orange-500 transition-all duration-300 hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
             >
-              {item.label}
-              <motion.div
-                className="absolute bottom-0 left-0 h-0.5 bg-blue-800"
-                variants={{
-                  initial: { width: 0 },
-                  hover: { width: '100%' }
-                }}
-                transition={{ duration: 0.3 }}
-              />
-            </motion.a>
-          ))}
+              <Phone className="mr-2 inline h-4 w-4" />
+              (123) 456-7890
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="rounded-lg bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+            >
+              <User className="mr-2 inline h-4 w-4" />
+              Sign In
+            </motion.button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="rounded-lg p-2 text-gray-700 lg:hidden"
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </nav>
 
-        <div className="flex items-center gap-2">
-          <motion.button
-            className="hidden sm:inline-flex rounded-md border border-gray-300 px-3 py-2 text-sm font-medium hover:bg-gray-50"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Sign in
-          </motion.button>
-          <motion.button
-            className="btn-primary text-sm"
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            List a Property
-          </motion.button>
-        </div>
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden lg:hidden"
+            >
+              <div className="space-y-4 border-t border-gray-200 py-6">
+                {navItems.map((item) => (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className="block text-base font-medium text-gray-700"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                ))}
+                <div className="space-y-3 pt-4">
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    className="flex w-full items-center justify-center rounded-lg border-2 border-orange-500 px-6 py-3 font-semibold text-orange-500 transition-all duration-300 hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                  >
+                    <Phone className="mr-2 h-4 w-4" />
+                    (123) 456-7890
+                  </motion.button>
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    className="flex w-full items-center justify-center rounded-lg bg-orange-500 px-6 py-3 font-semibold text-white transition-all duration-300 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                  >
+                    <User className="mr-2 h-4 w-4" />
+                    Sign In
+                  </motion.button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   );

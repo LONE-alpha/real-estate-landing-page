@@ -14,7 +14,6 @@ real-estate-landing/
 │   │   ├── Preloader.jsx              # Loading animation component
 │   │   ├── PropertyCard.jsx           # Individual property card
 │   │   ├── PropertyMap.jsx            # Map integration for properties
-│   │   ├── PropertyModal.jsx          # Property detail modal
 │   │   ├── PropertySection.jsx        # Properties grid section
 │   │   ├── PropertySlider.jsx         # Property carousel/slider
 │   │   ├── SearchBar.jsx              # Search functionality component

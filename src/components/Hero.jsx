@@ -1,41 +1,74 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import SearchBar from './SearchBar';
+import React from 'react';
+import SearchBar from './SearchBar.jsx';
+import { Home, Shield, Trophy, TrendingUp } from 'lucide-react';
 
-const Hero = ({ searchFilters, onSearchChange }) => {
+const Hero = () => {
   return (
-    <section className="relative overflow-hidden mb-4">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700"></div>
-      <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'url(img/hero/hero1.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 md:py-28 text-white">
-        <motion.h1
-          className="text-3xl md:text-5xl font-extrabold leading-tight"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6 }}
-        >
-          Discover Your Next Home
-        </motion.h1>
-        <motion.p
-          className="mt-4 text-base md:text-lg text-blue-100 max-w-2xl"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          Explore curated listings across the country with smart filters and immersive photos.
-        </motion.p>
+    <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+      {/* Background Pattern */}
+<div  className="absolute inset-0 bg-[url('img/hero/hero1.png')] bg-no-repeat bg-cover bg-center opacity-20" />
 
+      {/* Content */}
+      <div className="relative z-10 container-custom flex min-h-screen flex-col justify-center py-24">
         <motion.div
-          className="mt-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="mx-auto max-w-4xl text-center"
         >
-          <div className="bg-white/95 backdrop-blur rounded-xl shadow-xl p-4">
-            <SearchBar searchFilters={searchFilters} onSearchChange={onSearchChange} />
-          </div>
+          <h1 className="heading-1 mb-6 text-white">
+            Find Your Dream
+            <span className="block bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
+              Home with Confidence
+            </span>
+          </h1>
+          
+          <p className="mb-10 text-xl text-gray-300">
+            Discover premium properties with verified listings, virtual tours, and expert guidance
+          </p>
+
+          {/* Search Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mb-16"
+          >
+            <SearchBar />
+          </motion.div>
+
+          {/* Stats & Features */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="grid grid-cols-2 gap-6 md:grid-cols-4"
+          >
+            {[
+              { icon: Home, value: '50K+', label: 'Properties' },
+              { icon: Shield, value: '100%', label: 'Verified' },
+              { icon: Trophy, value: 'Award', label: 'Winning' },
+              { icon: TrendingUp, value: '99%', label: 'Satisfaction' },
+            ].map((item, index) => (
+              <div key={index} className="rounded-xl bg-white/10 p-4 backdrop-blur-sm">
+                <item.icon className="mx-auto mb-2 h-8 w-8 text-orange-400" />
+                <div className="text-2xl font-bold text-white">{item.value}</div>
+                <div className="text-sm text-gray-300">{item.label}</div>
+              </div>
+            ))}
+          </motion.div>
         </motion.div>
       </div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        animate={{ y: [0, 10, 0] }}
+        transition={{ repeat: Infinity, duration: 1.5 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+      >
+        <div className="h-8 w-px bg-gradient-to-b from-orange-500 to-transparent" />
+      </motion.div>
     </section>
   );
 };

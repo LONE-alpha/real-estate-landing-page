@@ -1,36 +1,49 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import Header from './components/Header';
+import Hero from './components/Hero';
+import PropertySection from './components/PropertySection';
+import Testimonials from './components/Testimonials';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import PropertySingle from './pages/PropertySingle';
-import BackToTop from './components/BackToTop';
 import Preloader from './components/Preloader';
+import BackToTop from './components/BackToTop';
+import PropertySingle from './pages/PropertySingle';
 
-const App = () => {
-  const [ready, setReady] = useState(false);
+function Home() {
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const t = setTimeout(() => setReady(true), 5000);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, []);
 
+  if (isLoading) {
+    return <Preloader />;
+  }
+
   return (
-    <BrowserRouter>
-      <div className="min-h-screen flex flex-col overflow-x-hidden">
-        <Preloader show={!ready} />
-        <Header />
-        <div className="pt-20">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/property/:id" element={<PropertySingle />} />
-          </Routes>
-        </div>
-        <Footer />
-        <BackToTop />
-      </div>
-    </BrowserRouter>
+    <div className="min-h-screen bg-white">
+      <Header />
+      <Hero />
+      <PropertySection />
+      <Testimonials />
+      <Footer />
+      <BackToTop />
+    </div>
   );
-};
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/property/:id" element={<PropertySingle />} />
+      </Routes>
+    </Router>
+  );
+}
 
 export default App;
